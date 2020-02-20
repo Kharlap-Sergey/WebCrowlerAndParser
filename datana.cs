@@ -36,6 +36,31 @@ namespace Data
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public async void PushDataAsync(string http, string nameart, string article, string fullpage, string datePublished)
+        {
+            await using var conn = new NpgsqlConnection(connactionParametrs);
+            await conn.OpenAsync();
+
+            // Insert some data
+            string command = String.Format("INSERT INTO sitelist(http , fullpage, article, datepublished) VALUES($${0}$$, $${3}$$, $${1}$$, $${2}$$)",
+                http, article, datePublished, fullpage);
+            string com = String.Format("select http from sitelist where http = $${0}$$", http);
+
+            bool isPresent = false;
+            await using (var cmd = new NpgsqlCommand(com, conn))
+            await using (var reader = await cmd.ExecuteReaderAsync())
+                while (await reader.ReadAsync())
+                    isPresent = true;
+
+            if (isPresent) return;
+            await using (var cmd = new NpgsqlCommand(command, conn))
+            {
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            // Retrieve all rows
+            
+        }
         public void PushData(string http, string nameart, string article, string fullpage, string datePublished)
         { 
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
@@ -44,10 +69,10 @@ namespace Data
 
             string command = String.Format("INSERT INTO sitelist(http , fullpage, article, datepublished) VALUES($${0}$$, $${3}$$, $${1}$$, $${2}$$)", 
                 http, article, datePublished, fullpage);
-            string com = String.Format("select 1 from sitelist where http = $${0}$$", http);
+            string com = String.Format("select http from sitelist where http = $${0}$$", http);
             NpgsqlCommand newComm = new NpgsqlCommand(com, SQLConnaction);
 
-            var ans = newComm.ExecuteReaderAsync();
+            //var ans = newComm.ExecuteReader();
             //?dsafa
             //Console.WriteLine(ans.Depth);
             NpgsqlCommand newCommand = new NpgsqlCommand(command, SQLConnaction);

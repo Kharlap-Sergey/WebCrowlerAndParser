@@ -18,7 +18,7 @@ namespace Abot
              */
             return new CrawlConfigurationX
             {
-                MaxPagesToCrawl = 1,
+                MaxPagesToCrawl = 10000,
                 MinCrawlDelayPerDomainMilliSeconds = 10,
             };
         }

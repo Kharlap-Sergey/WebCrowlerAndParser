@@ -17,7 +17,7 @@ namespace Parsing
             string articleName= ExtractArticleName(page);
             string date = GetDate(article);
             DataBase data = new DataBase();
-            data.PushData(url, articleName, article, page, date);
+            if(article != "NON") data.PushDataAsync(url, articleName, article, page, date);
 
             WriteLineToConsole_color(articleName, ConsoleColor.Green);
             WriteLineToConsole_color(date, ConsoleColor.Yellow);
