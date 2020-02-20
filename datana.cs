@@ -48,6 +48,7 @@ namespace Data
             NpgsqlCommand newComm = new NpgsqlCommand(com, SQLConnaction);
 
             var ans = newComm.ExecuteReaderAsync();
+            //?dsafa
             //Console.WriteLine(ans.Depth);
             NpgsqlCommand newCommand = new NpgsqlCommand(command, SQLConnaction);
             newCommand.ExecuteNonQuery();
