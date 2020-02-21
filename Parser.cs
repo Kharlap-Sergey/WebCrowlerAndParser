@@ -10,19 +10,24 @@ namespace Parsing
             Console.WriteLine(info);
             Console.ForegroundColor = ConsoleColor.White;
         }
+
+        private void ConsolePrintPageInf(string url, string articleName, string article, string page, string date)
+       {
+            WriteLineToConsole_color(articleName, ConsoleColor.Green);
+            WriteLineToConsole_color(date, ConsoleColor.Yellow);
+            WriteLineToConsole_color(url, ConsoleColor.DarkMagenta);
+            WriteLineToConsole_color(article, ConsoleColor.Blue);
+        }
+     
         public void OperatePage(string page, string url)
         {
-            //Console.WriteLine(page.Length);
             string article = ExtractArticle(page);
             string articleName= ExtractArticleName(page);
             string date = GetDate(article);
             DataBase data = new DataBase();
             if(article != "NON") data.PushDataAsync(url, articleName, article, page, date);
 
-            WriteLineToConsole_color(articleName, ConsoleColor.Green);
-            WriteLineToConsole_color(date, ConsoleColor.Yellow);
-            WriteLineToConsole_color(url, ConsoleColor.DarkMagenta);
-            WriteLineToConsole_color(article, ConsoleColor.Blue);
+            ConsolePrintPageInf(url, articleName, article, page, date);
         }
 
         private string GetDate(string text)

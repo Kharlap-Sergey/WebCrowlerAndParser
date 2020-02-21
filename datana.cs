@@ -7,6 +7,14 @@ namespace Data
 
     public class DataBase
     {
+       // CREATE TABLE SITELIST(
+       //id serial Primary key,
+       //http varchar(1000) NOT NULL,
+       //fullpage varchar(200000) NOT NULL,
+       //article varchar(50000) NOT NULL,
+       //datePublished varchar(100) NOT NULL
+       // );
+
         //create new table
         //CREATE TABLE SITELIST(
         //       http varchar(1000) NOT NULL,
@@ -81,19 +89,19 @@ namespace Data
             SQLConnaction.Close();
         }
 
-        void GetData()
+        public void GetData()
         {
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
 
             SQLConnaction.Open();
             WriteLineToConsole_color("Conaction to DataBase is sucsess", ConsoleColor.Green);
-            string command = "SELECT * FROM example";
+            string command = "SELECT * FROM sitelist";
 
             NpgsqlCommand newCommand = new NpgsqlCommand(command, SQLConnaction);
             NpgsqlDataReader npgSqlDataReader = newCommand.ExecuteReader();
 
             foreach (DbDataRecord dbDataRecord in npgSqlDataReader)
-                Console.WriteLine(dbDataRecord["uri"] + "   " + dbDataRecord["article"]);
+                Console.WriteLine(dbDataRecord["http"] + "\n" + dbDataRecord["article"]);
 
             SQLConnaction.Close();
         }

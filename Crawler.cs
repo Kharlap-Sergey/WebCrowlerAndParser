@@ -1,7 +1,7 @@
 ﻿using System;
 using Parsing;
 using Abot;
-
+using Data;
 namespace Crawler
 {
     class Crawler
@@ -15,10 +15,8 @@ namespace Crawler
             //abot.Start("https://belaruspartisan.by/life/491542/");
             abot.Start("https://belaruspartisan.by/politic/491685/");
 
-            //string page = "rtujbvgyj < dfadsfas > {dfasdfas}";
-
-            //page = parse.(page);
-            //Console.WriteLine(page); 
+            DataBase database = new DataBase();
+            database.GetData();
         }
     }
 }
