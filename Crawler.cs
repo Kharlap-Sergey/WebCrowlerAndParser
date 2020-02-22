@@ -13,8 +13,8 @@ namespace Crawler
             AbotC abot = new AbotC();
             Parse parse = new Parse();
             DataBase database = new DataBase();
-            PullEnti pullEnti = new PullEnti();
-            pullEnti.Analize();
+            OperateEnti pullEnti = new OperateEnti();
+            pullEnti.ParseEntitiesAndPushToDataBase("", "fasdf");
             //abot.Start("https://belaruspartisan.by/life/491542/");
             //abot.Start("https://belaruspartisan.by/politic/491685/");
             //database.GetData();

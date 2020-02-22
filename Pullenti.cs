@@ -6,12 +6,80 @@ using EP.Ner;
 using EP.Morph;
 using EP.Ner.Core;
 using EP.Ner.Keyword;
+using EP.Ner.Geo;
+using EP.Ner.Person;
+using EP.Ner.Org;
 
 namespace EPull
 {
-    public class PullEnti
+    public class OperateEnti
     {
-        public void Analize()
+        public void ParseEntitiesAndPushToDataBase(string text, string uri)
+        {
+            PullEnti.ExtractEntities(text);
+        }
+    }
+
+    public class PullEnti
+    {     
+       private static AnalysisResult ExtractPerson(string text)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
+            PersonAnalyzer.Initialize();
+
+            sw.Stop();
+
+            using (Processor proc = ProcessorService.CreateProcessor())
+            {
+                AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
+                return ar;
+            }
+        }
+
+        private static AnalysisResult ExtractPGeo(string text)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
+            GeoAnalyzer.Initialize();
+
+            sw.Stop();
+
+            using (Processor proc = ProcessorService.CreateProcessor())
+            {
+                AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
+                return ar;
+            }
+        }
+        private static AnalysisResult ExtractOrganization(string text)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
+            OrganizationAnalyzer.Initialize();
+
+            sw.Stop();
+
+            using (Processor proc = ProcessorService.CreateProcessor())
+            {
+                AnalysisResult ar = proc.Process(new SourceOfAnalysis(text));
+                return ar;
+            }
+        }
+
+        public static void ExtractEntities(string text)
+        {
+            AnalysisResult persons = ExtractPerson(text);
+            AnalysisResult geos = ExtractPGeo(text);
+            AnalysisResult organis = ExtractOrganization(text);
+
+            foreach (var person in persons.Entities)
+                Console.WriteLine(person);
+            foreach (var geo in geos.Entities)
+                Console.WriteLine(geo);
+            foreach (var organ in organis.Entities)
+                Console.WriteLine(organ);
+        }
+        void AnalizeExempl()
         {
             Console.WriteLine("Enered");
             Stopwatch sw = Stopwatch.StartNew();
@@ -19,8 +87,12 @@ namespace EPull
             // инициализация - необходимо проводить один раз до обработки текстов
             Console.Write("Initializing ... ");
 
-            // инициализируются движок и все анализаторы из SDK
-            EP.Ner.Sdk.Initialize(MorphLang.RU | MorphLang.EN);
+            // инициализируются движок
+            ProcessorService.Initialize(MorphLang.RU | MorphLang.EN);
+
+           // GeoAnalyzer.Initialize();
+           // OrganizationAnalyzer.Initialize();
+            PersonAnalyzer.Initialize();
 
             sw.Stop();
             Console.WriteLine("OK (by {0} ms), version {1}", (int)sw.ElapsedMilliseconds, ProcessorService.Version);
@@ -32,6 +104,8 @@ namespace EPull
             using (Processor proc = ProcessorService.CreateProcessor())
             {
                 // анализируем текст
+
+                //AnalysisResult analRes = proc.Process(new SourceOfAnalysis(txt));
                 AnalysisResult ar = proc.Process(new SourceOfAnalysis(txt));
 
                 // результирующие сущности
