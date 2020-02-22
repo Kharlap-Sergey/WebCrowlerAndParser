@@ -11,8 +11,46 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Pul\EP.DemoCore\EP.Demo.Core.csproj" />
-    <ProjectReference Include="Pul\EP.SdkCore\EP.Sdk.Core.csproj" />
+    <ProjectReference Include="..\pullet\EP.Sdk\EP.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EP.Analyzer.Biblio">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Biblio.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Decree">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Decree.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Goods">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Goods.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Location">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Location.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Misc">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Misc.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Organization">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Organization.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Person">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Person.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Semantic">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Semantic.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Analyzer.Util">
+      <HintPath>..\pullet\EP.Sdk\EP.Analyzer.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Core">
+      <HintPath>..\pullet\EP.Sdk\EP.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Explanatory">
+      <HintPath>..\pullet\EP.Sdk\EP.Explanatory.dll</HintPath>
+    </Reference>
+    <Reference Include="EP.Morphology">
+      <HintPath>..\pullet\EP.Sdk\EP.Morphology.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

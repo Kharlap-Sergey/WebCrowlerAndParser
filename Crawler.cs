@@ -2,6 +2,7 @@
 using Parsing;
 using Abot;
 using Data;
+using EPull;
 namespace Crawler
 {
     class Crawler
@@ -11,12 +12,14 @@ namespace Crawler
         {
             AbotC abot = new AbotC();
             Parse parse = new Parse();
-
-            //abot.Start("https://belaruspartisan.by/life/491542/");
-            abot.Start("https://belaruspartisan.by/politic/491685/");
-
             DataBase database = new DataBase();
-            database.GetData();
+            PullEnti pullEnti = new PullEnti();
+            pullEnti.Analize();
+            //abot.Start("https://belaruspartisan.by/life/491542/");
+            //abot.Start("https://belaruspartisan.by/politic/491685/");
+            //database.GetData();
+
+
         }
     }
 }
