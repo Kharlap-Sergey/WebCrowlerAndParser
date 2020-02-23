@@ -9,17 +9,12 @@ using EP.Ner.Keyword;
 using EP.Ner.Geo;
 using EP.Ner.Person;
 using EP.Ner.Org;
+using Npgsql;
+using Data;
+using System.Data.Common;
 
 namespace EPull
 {
-    public class OperateEnti
-    {
-        public void ParseEntitiesAndPushToDataBase(string text, string uri)
-        {
-            PullEnti.ExtractEntities(text);
-        }
-    }
-
     public class PullEnti
     {     
        private static AnalysisResult ExtractPerson(string text)

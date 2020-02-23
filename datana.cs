@@ -36,7 +36,6 @@ namespace Data
             return result;
             
         }
-        string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
         public void WriteLineToConsole_color(string info, ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -46,6 +45,7 @@ namespace Data
 
         public async void PushDataAsync(string http, string nameart, string article, string fullpage, string datePublished)
         {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
             await using var conn = new NpgsqlConnection(connactionParametrs);
             await conn.OpenAsync();
 
@@ -70,7 +70,8 @@ namespace Data
             
         }
         public void PushData(string http, string nameart, string article, string fullpage, string datePublished)
-        { 
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
             SQLConnaction.Open();
             WriteLineToConsole_color("Conaction to DataBase is sucsess", ConsoleColor.Green);
@@ -89,8 +90,25 @@ namespace Data
             SQLConnaction.Close();
         }
 
+        public NpgsqlDataReader GetDataBaseContentFromHTTP()
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
+            NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
+
+            SQLConnaction.Open();
+            WriteLineToConsole_color("Conaction to DataBase is sucsess", ConsoleColor.Green);
+            string command = "SELECT * FROM sitelist";
+
+            NpgsqlCommand newCommand = new NpgsqlCommand(command, SQLConnaction);
+            NpgsqlDataReader npgSqlDataReader = newCommand.ExecuteReader();
+
+            SQLConnaction.Close();
+
+            return npgSqlDataReader;
+        }
         public void GetData()
         {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
 
             SQLConnaction.Open();
@@ -114,6 +132,7 @@ namespace Data
             //conn.Open(); //Открываем соединение.
             // var result = comm.ExecuteScalar().ToString(); //Выполняем нашу команду.
             //conn.Close(); //Закрываем соединение.
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
 
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
 
