@@ -61,18 +61,24 @@ namespace EPull
             }
         }
 
-        public static void ExtractEntities(string text)
+        public static List<string> ExtractEntities(string text)
         {
             AnalysisResult persons = ExtractPerson(text);
             AnalysisResult geos = ExtractPGeo(text);
             AnalysisResult organis = ExtractOrganization(text);
 
+            var entities = new List<string>();
             foreach (var person in persons.Entities)
-                Console.WriteLine(person);
+                entities.Add(person.ToString());
+                //Console.WriteLine(person);
             foreach (var geo in geos.Entities)
-                Console.WriteLine(geo);
+                entities.Add(geo.ToString());
+            //Console.WriteLine(geo);
             foreach (var organ in organis.Entities)
-                Console.WriteLine(organ);
+                entities.Add(organ.ToString());
+            //Console.WriteLine(organ);
+
+            return entities;
         }
         void AnalizeExempl()
         {

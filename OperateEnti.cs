@@ -6,26 +6,31 @@ using Data;
 using EPull;
 using Npgsql;
 
-namespace Epull
+namespace EPull
 {
     public class OperateEnti
     {
         public void OperatePagesContent()
         {
             DataBase dataBase = new DataBase();
-            NpgsqlDataReader pagesData = dataBase.GetDataBaseContentFromHTTP();
+            var pagesData = dataBase.GetDataBaseContentFromHTTP();
 
-            foreach (DbDataRecord pageConstent in pagesData)
+            for(int i = 0; i < pagesData.Item1.Count; i++)
             {
-                string article = pageConstent["article"].ToString();
-                string uri = pageConstent["http"].ToString();
+                string article = pagesData.Item1[i];
+                string uri = pagesData.Item2[i];
+
                 ParseEntitiesAndPushToDataBase(article, uri);
             }
         }
         public void ParseEntitiesAndPushToDataBase(string text, string http)
         {
-            PullEnti.ExtractEntities(text);
+            //Console.WriteLine(http);
+            var entities = PullEnti.ExtractEntities(text);
 
+            DataBase dataBase = new DataBase();
+
+            dataBase.UnitEntitiesAndPages(entities, http);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using Npgsql;
 
@@ -36,6 +37,89 @@ namespace Data
             return result;
             
         }
+
+        public int GetEntityiD(string entity)
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
+            var conn = new NpgsqlConnection(connactionParametrs);
+            conn.Open();
+
+            //Console.WriteLine(-1);
+            // Insert some data
+            string com = String.Format("select id from entities where entity = $${0}$$", entity);
+
+            int id = -1;
+            var cmd = new NpgsqlCommand(com, conn);
+            var reader = cmd.ExecuteReader();
+            foreach (DbDataRecord dbDataRecord in reader)
+                //Console.WriteLine(dbDataRecord["id"]);
+                id = int.Parse(dbDataRecord["id"].ToString());
+
+            conn.Close();
+            return id;
+        }
+        public int GetHttpID(string http)
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
+            var conn = new NpgsqlConnection(connactionParametrs);
+            conn.Open();
+
+            // Insert some data
+            string com = String.Format("select id from sitelist where http = $${0}$$", http);
+
+            int id = -1;
+            var cmd = new NpgsqlCommand(com, conn);
+            var reader = cmd.ExecuteReader();
+            foreach (DbDataRecord dbDataRecord in reader)
+                id = int.Parse(dbDataRecord["id"].ToString());
+
+            conn.Close();
+            return id;
+
+            // Retrieve all rows
+        }
+        public void UnitEntitiesAndPages(List<string> entities, string http)
+        {
+            
+            var httpId = GetHttpID(http); 
+            if (httpId == -1) return;
+
+            foreach(var entity in entities)
+            {
+                AddEntitiAndPageTodDataBase(entity, httpId);
+            }
+        }
+
+        async private void UniteTablesColumns(int E_ID, int P_ID)
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
+            await using var conn = new NpgsqlConnection(connactionParametrs);
+            await conn.OpenAsync();
+
+            // Insert some data
+            string command = String.Format("INSERT INTO EntiSite(enti_id, site_id) VALUES($${0}$$, $${1}$$)", E_ID, P_ID);
+            string com = String.Format("select  *from EntiSite where enti_id = $${0}$$ and site_id = $${1}$$", E_ID, P_ID);
+
+            bool isPresent = false;
+            await using (var cmd = new NpgsqlCommand(com, conn))
+            await using (var reader = await cmd.ExecuteReaderAsync())
+                while (await reader.ReadAsync())
+                    isPresent = true;
+
+            if (isPresent) return;
+            await using (var cmd = new NpgsqlCommand(command, conn))
+            {
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+        private void AddEntitiAndPageTodDataBase(string entity, int httpID)
+        {
+            PushEntitiesAsync(entity);
+            int entityID = GetEntityiD(entity);
+
+            UniteTablesColumns(entityID, httpID);
+           // Console.WriteLine(entityID.ToString() + httpID.ToString());
+        }
         public void WriteLineToConsole_color(string info, ConsoleColor color)
         {
             Console.ForegroundColor = color;
@@ -43,6 +127,28 @@ namespace Data
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public async void PushEntitiesAsync(string entity)
+        {
+            string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
+            await using var conn = new NpgsqlConnection(connactionParametrs);
+            await conn.OpenAsync();
+
+            // Insert some data
+            string command = String.Format("INSERT INTO entities(entity, fullpage) VALUES($${0}$$, $$re$$)", entity);
+            string com = String.Format("select entity from entities where entity = $${0}$$", entity);
+
+            bool isPresent = false;
+            await using (var cmd = new NpgsqlCommand(com, conn))
+            await using (var reader = await cmd.ExecuteReaderAsync())
+                while (await reader.ReadAsync())
+                    isPresent = true;
+
+            if (isPresent) return;
+            await using (var cmd = new NpgsqlCommand(command, conn))
+            {
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
         public async void PushDataAsync(string http, string nameart, string article, string fullpage, string datePublished)
         {
             string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
@@ -90,7 +196,7 @@ namespace Data
             SQLConnaction.Close();
         }
 
-        public NpgsqlDataReader GetDataBaseContentFromHTTP()
+        public Tuple<List<string>, List<string>> GetDataBaseContentFromHTTP()
         {
             string connactionParametrs = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=AbotProject;";
             NpgsqlConnection SQLConnaction = new NpgsqlConnection(connactionParametrs);
@@ -102,9 +208,20 @@ namespace Data
             NpgsqlCommand newCommand = new NpgsqlCommand(command, SQLConnaction);
             NpgsqlDataReader npgSqlDataReader = newCommand.ExecuteReader();
 
+            List<string> articles = new List<string>();
+            List<string> uries = new List<string>();
+            foreach(DbDataRecord pageConstent in npgSqlDataReader)
+            {
+                string article = pageConstent["article"].ToString();
+                string uri = pageConstent["http"].ToString();
+
+                articles.Add(article);
+                uries.Add(uri);
+            }
+
             SQLConnaction.Close();
 
-            return npgSqlDataReader;
+            return Tuple.Create(articles, uries);
         }
         public void GetData()
         {

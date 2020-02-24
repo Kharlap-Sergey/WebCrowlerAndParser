@@ -3,6 +3,7 @@ using Parsing;
 using Abot;
 using Data;
 using EPull;
+
 namespace Crawler
 {
     class Crawler
@@ -14,8 +15,9 @@ namespace Crawler
             DataBase database = new DataBase();
             OperateEnti pullEnti = new OperateEnti();
             
-            pullEnti.OperatePagesContent();
+            
             //abot.Start("https://belaruspartisan.by/life/491542/");
+            pullEnti.OperatePagesContent();
             //abot.Start("https://belaruspartisan.by/politic/491685/");
             //database.GetData();
 
